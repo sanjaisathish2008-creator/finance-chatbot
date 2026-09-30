@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FinanceGuide</title>
+<style>
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#12352b,transparent 35%),radial-gradient(circle at bottom right,#10284a,transparent 35%),#07111f;color:#e5edf7;overflow:hidden}
+.app{width:100%;height:100dvh;min-height:0;padding:18px;display:flex;align-items:center;justify-content:center}.card{width:min(1100px,100%);height:min(900px,100%);min-height:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid #ffffff1c;border-radius:26px;background:#091423e8;box-shadow:0 25px 80px #0006;backdrop-filter:blur(18px)}
+header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;border-bottom:1px solid #ffffff14;background:#0a1728f5}.brand{display:flex;align-items:center;gap:12px;min-width:0}.icon{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#22c55e,#0ea5e9);font-weight:900;font-size:20px}.brand h1{margin:0;font-size:18px}.status{display:flex;align-items:center;gap:7px;margin-top:4px;color:#94a3b8;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 12px #22c55ecc}.clear,.suggestion{border:1px solid #ffffff1c;border-radius:11px;padding:9px 12px;color:#cbd5e1;background:#ffffff0a;cursor:pointer}.clear:hover,.suggestion:hover{background:#ffffff18}
+main{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}.messages{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:24px clamp(14px,4vw,42px);scroll-behavior:smooth}.messages::-webkit-scrollbar{width:8px}.messages::-webkit-scrollbar-thumb{background:#94a3b840;border-radius:99px}
+.welcome{max-width:680px;margin:10px auto 22px;padding:22px;border:1px solid #60a5fa2e;border-radius:20px;background:linear-gradient(135deg,#0ea5e914,#22c55e0f);text-align:center}.welcome h2{margin:0 0 8px;font-size:clamp(21px,4vw,28px)}.welcome p{margin:0;color:#9fb0c4;line-height:1.6}.suggestions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}.suggestion{border-radius:999px;padding:8px 12px}
+.row{display:flex;width:100%;margin:0 0 15px}.row.user{justify-content:flex-end}.row.ai{justify-content:flex-start}.bubble{max-width:min(78%,760px);padding:12px 15px;border-radius:17px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}.user .bubble{color:#eff6ff;background:linear-gradient(135deg,#2563eb,#0ea5e9);border-bottom-right-radius:5px}.ai .bubble{color:#dce8f5;background:#1e293be8;border:1px solid #94a3b821;border-bottom-left-radius:5px}
+.typing{display:none;align-items:center;gap:5px;width:max-content;padding:11px 14px;margin:0 0 15px;border:1px solid #94a3b821;border-radius:16px;background:#1e293be8}.typing.show{display:flex}.typing span{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:pulse 1s infinite ease-in-out}.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}@keyframes pulse{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.composer{flex:0 0 auto;display:flex;gap:10px;padding:14px 18px max(14px,env(safe-area-inset-bottom));border-top:1px solid #ffffff14;background:#081322f7}.input{flex:1;min-width:0;height:48px;border:1px solid #94a3b833;border-radius:14px;outline:none;padding:0 15px;color:#f8fafc;background:#0f172ae0}.input:focus{border-color:#38bdf88c;box-shadow:0 0 0 3px #38bdf814}.send{min-width:88px;height:48px;border:0;border-radius:14px;color:white;font-weight:700;background:linear-gradient(135deg,#2563eb,#0891b2);cursor:pointer}.send:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:700px){.app{padding:0}.card{width:100%;height:100dvh;border:0;border-radius:0}header{padding:14px 15px}.icon{width:40px;height:40px;flex-basis:40px;border-radius:12px}.messages{padding:18px 12px}.bubble{max-width:88%}.composer{padding-left:10px;padding-right:10px}.send{min-width:70px}}
+</style>
+</head>
+<body>
+<div class="app"><section class="card">
+<header><div class="brand"><div class="icon">$</div><div><h1>FinanceGuide</h1><div class="status"><span class="dot"></span>Online · Finance assistant</div></div></div><button class="clear" id="clear" type="button">Clear chat</button></header>
+<main><div class="messages" id="messages" role="log" aria-live="polite">
+<div class="welcome" id="welcome"><h2>Welcome to FinanceGuide</h2><p>Ask about budgeting, saving, banking, loans, investing concepts, interest, credit, insurance, and other finance-related topics.</p><div class="suggestions"><button class="suggestion">How can I make a budget?</button><button class="suggestion">What is compound interest?</button><button class="suggestion">What is a credit score?</button></div></div>
+<div class="typing" id="typing"><span></span><span></span><span></span></div>
+</div>
+<form class="composer" id="form"><input class="input" id="input" maxlength="4000" autocomplete="off" placeholder="Ask a finance question..." aria-label="Message"><button class="send" id="send" type="submit">Send</button></form></main>
+</section></div>
+<script>
+const messages=document.getElementById("messages"),welcome=document.getElementById("welcome"),typing=document.getElementById("typing"),form=document.getElementById("form"),input=document.getElementById("input"),send=document.getElementById("send"),clear=document.getElementById("clear");
+function scrollLatest(){requestAnimationFrame(()=>messages.scrollTop=messages.scrollHeight)}
+function addMessage(text,type){welcome.style.display="none";const row=document.createElement("div");row.className="row "+type;const bubble=document.createElement("div");bubble.className="bubble";bubble.textContent=text;row.appendChild(bubble);messages.insertBefore(row,typing);scrollLatest()}
+function loading(v){typing.classList.toggle("show",v);send.disabled=v;input.disabled=v;if(v)scrollLatest()}
+async function sendMessage(message){addMessage(message,"user");loading(true);try{const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message})});const data=await r.json();if(!r.ok)throw new Error(data.error||"Something went wrong.");addMessage(data.response,"ai")}catch(e){addMessage(e.message||"Sorry, something went wrong.","ai")}finally{loading(false);input.focus()}}
+form.addEventListener("submit",e=>{e.preventDefault();const m=input.value.trim();if(!m||send.disabled)return;input.value="";sendMessage(m)});
+document.querySelectorAll(".suggestion").forEach(b=>b.addEventListener("click",()=>{input.value=b.textContent.trim();input.focus()}));
+clear.addEventListener("click",()=>{messages.querySelectorAll(".row").forEach(x=>x.remove());welcome.style.display="block";input.value="";input.focus();scrollLatest()});input.focus();
+</script>
+</body>
+</html>
